@@ -1,0 +1,30 @@
+version: '2'
+volumes:
+  mysql_volume:
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./www:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+  php:
+    build: ./php
+    volumes:
+      - ./www:/var/www/html
+
+  db:
+    image: mysql
+    volumes:
+      - ./mysql:/etc/mysql/conf.d
+      - mysql_volume:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=forge
+      - MYSQL_USER=forge
+      - MYSQL_PASSWORD=forge
+      - MYSQL_DATABASE=forge
